@@ -16,6 +16,7 @@ public class MainFrame extends JFrame {
 
         // Menu Produto
         JMenu menuProduto = new JMenu("Produto");
+
         JMenuItem itemCadastrarProduto = new JMenuItem("Cadastrar Produto");
         itemCadastrarProduto.addActionListener(new ActionListener() {
             @Override
@@ -24,6 +25,15 @@ public class MainFrame extends JFrame {
             }
         });
         menuProduto.add(itemCadastrarProduto);
+
+        JMenuItem itemGerenciarProdutos = new JMenuItem("Gerenciar Produtos");
+        itemGerenciarProdutos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EditarView().setVisible(true);
+            }
+        });
+        menuProduto.add(itemGerenciarProdutos); // Adiciona o item de Gerenciar Produtos ao menu
 
         // Menu Categoria
         JMenu menuCategoria = new JMenu("Categoria");
@@ -46,9 +56,11 @@ public class MainFrame extends JFrame {
             }
         });
         menuRelatorio.add(itemRelatorio);
+
+        // Adiciona menus à barra de menus
         menuBar.add(menuProduto);
         menuBar.add(menuCategoria);
-        menuBar.add(menuRelatorio); // Adiciona o menu Relatório à barra de menus
+        menuBar.add(menuRelatorio);
 
         setJMenuBar(menuBar);
     }
