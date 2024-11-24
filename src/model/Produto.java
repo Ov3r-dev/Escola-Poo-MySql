@@ -8,6 +8,7 @@ public class Produto {
     private double precoCompra;
     private double precoVenda;
     private int categoriaId;
+    private double lucro;
 
     // Getters e Setters
     public int getId() { return id; }
@@ -30,4 +31,10 @@ public class Produto {
 
     public int getCategoriaId() { return categoriaId; }
     public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
+
+    public double getLucro(){
+        return lucro;}
+    public void setLucro(double lucro){
+        this.lucro = lucro;
+    }
 }

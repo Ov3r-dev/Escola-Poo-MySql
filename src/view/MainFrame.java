@@ -33,7 +33,7 @@ public class MainFrame extends JFrame {
                 new EditarView().setVisible(true); // Abre a tela de gerenciamento de produtos
             }
         });
-        menuProduto.add(itemGerenciarProdutos); // Adiciona o item de Gerenciar Produtos ao menu
+        menuProduto.add(itemGerenciarProdutos);
 
         JMenuItem itemConsultarProdutos = new JMenuItem("Consultar Produtos");
         itemConsultarProdutos.addActionListener(new ActionListener() {
@@ -42,7 +42,7 @@ public class MainFrame extends JFrame {
                 new ConsultaView().setVisible(true); // Abre a tela de consulta de produtos
             }
         });
-        menuProduto.add(itemConsultarProdutos); // Adiciona o item de Consultar Produtos ao menu
+        menuProduto.add(itemConsultarProdutos);
 
         // Menu Categoria
         JMenu menuCategoria = new JMenu("Categoria");
@@ -57,14 +57,36 @@ public class MainFrame extends JFrame {
 
         // Menu Relatório
         JMenu menuRelatorio = new JMenu("Relatório");
-        JMenuItem itemRelatorio = new JMenuItem("Obter Relatório");
-        itemRelatorio.addActionListener(new ActionListener() {
+
+        // Relatório Geral
+        JMenuItem itemRelatorioGeral = new JMenuItem("Relatório Geral");
+        itemRelatorioGeral.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new RelatórioView().setVisible(true); // Abre a tela de relatório
+                new RelatórioView().setVisible(true); // Abre a tela de relatório geral
             }
         });
-        menuRelatorio.add(itemRelatorio);
+        menuRelatorio.add(itemRelatorioGeral);
+
+        // Relatório de Lucro
+        JMenuItem itemLucro = new JMenuItem("Relatório de Lucro");
+        itemLucro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new LucroView().setVisible(true); // Abre a tela de relatório de lucro
+            }
+        });
+        menuRelatorio.add(itemLucro);
+
+        // Relatório de Estoque Baixo
+        JMenuItem itemEstoqueBaixo = new JMenuItem("Estoque Baixo");
+        itemEstoqueBaixo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EstoqueBaixoView().setVisible(true); // Abre a tela de estoque baixo
+            }
+        });
+        menuRelatorio.add(itemEstoqueBaixo);
 
         // Adiciona menus à barra de menus
         menuBar.add(menuProduto);

@@ -55,14 +55,44 @@ public class CategoriaController {
 
     public void excluirCategoria(int categoriaId) {
         String sql = "DELETE FROM categoria WHERE id = ?";
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Verificar se a categoria existe antes de tentar excluir
+            if (!categoriaExiste(categoriaId)) {
+                System.out.println("Categoria não encontrada!");
+                return; // Se a categoria não existe, não faz sentido continuar com a exclusão
+            }
+
             stmt.setInt(1, categoriaId);
-            stmt.executeUpdate();
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Categoria excluída com sucesso!");
+            } else {
+                System.out.println("Erro ao excluir a categoria.");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    // Método auxiliar para verificar se a categoria existe
+    private boolean categoriaExiste(int categoriaId) {
+        String sql = "SELECT 1 FROM categoria WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, categoriaId);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Retorna true se a categoria existe
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Se houver erro ou a categoria não for encontrada
+    }
+
 
     public List<Categoria> consultarTodasCategorias() {
         List<Categoria> categorias = new ArrayList<>();
@@ -81,5 +111,9 @@ public class CategoriaController {
             e.printStackTrace();
         }
         return categorias;
+
+
     }
+
+
 }
