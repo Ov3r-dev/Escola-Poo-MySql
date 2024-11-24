@@ -50,7 +50,7 @@ public class MainFrame extends JFrame {
         itemCadastrarCategoria.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CategoriaView().setVisible(true); // Abre a tela de cadastro de categoria
+                new CategoriaView().setVisible(true); // Abre a tela de cadastro e exclusão de categoria
             }
         });
         menuCategoria.add(itemCadastrarCategoria);

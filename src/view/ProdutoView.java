@@ -2,24 +2,29 @@ package view;
 
 import controller.ProdutoController;
 import model.Produto;
+import controller.CategoriaController;
+import model.Categoria;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class ProdutoView extends JFrame {
 
     private JTextField txtNome, txtDescricao, txtQuantidade, txtPrecoCompra, txtPrecoVenda;
     private JComboBox<String> cboCategoria;
     private ProdutoController produtoController;
+    private CategoriaController categoriaController;
 
     public ProdutoView() {
         setTitle("Cadastro de Produto");
         setSize(400, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
         produtoController = new ProdutoController();
+        categoriaController = new CategoriaController();
 
         // Layout do formulário
         setLayout(new GridLayout(7, 2));
@@ -45,8 +50,11 @@ public class ProdutoView extends JFrame {
         add(txtPrecoVenda);
 
         add(new JLabel("Categoria:"));
-        cboCategoria = new JComboBox<>(new String[] {"Categoria 1", "Categoria 2", "Categoria 3"});
+        cboCategoria = new JComboBox<>();
         add(cboCategoria);
+
+        // Carregar categorias ao iniciar
+        carregarCategorias();
 
         JButton btnCadastrar = new JButton("Cadastrar");
         add(btnCadastrar);
@@ -60,6 +68,13 @@ public class ProdutoView extends JFrame {
         });
     }
 
+    private void carregarCategorias() {
+        List<Categoria> categorias = categoriaController.consultarTodasCategorias();
+        for (Categoria categoria : categorias) {
+            cboCategoria.addItem(categoria.getNome());
+        }
+    }
+
     private void cadastrarProduto() {
         // Obter dados do formulário
         String nome = txtNome.getText();
@@ -67,7 +82,7 @@ public class ProdutoView extends JFrame {
         int quantidade = Integer.parseInt(txtQuantidade.getText());
         double precoCompra = Double.parseDouble(txtPrecoCompra.getText());
         double precoVenda = Double.parseDouble(txtPrecoVenda.getText());
-        int categoriaId = cboCategoria.getSelectedIndex() + 1; // Apenas para exemplo
+        int categoriaId = cboCategoria.getSelectedIndex() + 1; // Usando o índice do JComboBox para obter o ID da categoria
 
         // Criar objeto Produto e enviar para o controlador
         Produto produto = new Produto();
