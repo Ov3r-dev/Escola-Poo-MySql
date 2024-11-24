@@ -1,3 +1,4 @@
+
 package view;
 
 import controller.ProdutoController;
@@ -83,6 +84,13 @@ public class ProdutoView extends JFrame {
         double precoCompra = Double.parseDouble(txtPrecoCompra.getText());
         double precoVenda = Double.parseDouble(txtPrecoVenda.getText());
         int categoriaId = cboCategoria.getSelectedIndex() + 1; // Usando o índice do JComboBox para obter o ID da categoria
+
+        if (quantidade < 5) {
+            JOptionPane.showMessageDialog(this, "Alerta: Estoque abaixo do mínimo especificado (mínimo 5 itens).",
+                    "Alerta de Estoque", JOptionPane.WARNING_MESSAGE);
+            ; // Impede o cadastro do produto se a quantidade for inferior a 5
+        }
+
 
         // Criar objeto Produto e enviar para o controlador
         Produto produto = new Produto();

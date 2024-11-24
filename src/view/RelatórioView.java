@@ -8,12 +8,10 @@ import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 import database.DatabaseConnection;
 
-
 public class RelatórioView extends JFrame {
 
     private JTable table;
     private DefaultTableModel tableModel;
-
 
     private final String sql = "SELECT id, nome, descricao, quantidade, preco_compra, preco_venda, categoria_id FROM produto";
 
@@ -23,10 +21,8 @@ public class RelatórioView extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-
         tableModel = new DefaultTableModel();
         table = new JTable(tableModel);
-
 
         tableModel.addColumn("ID");
         tableModel.addColumn("Nome");
@@ -36,10 +32,8 @@ public class RelatórioView extends JFrame {
         tableModel.addColumn("Preço Venda");
         tableModel.addColumn("Categoria ID");
 
-
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-
 
         loadDataFromDatabase();
     }
@@ -49,21 +43,32 @@ public class RelatórioView extends JFrame {
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
-
             tableModel.setRowCount(0);
 
+            boolean estoqueBaixo = false;  // Flag para verificar se algum produto tem estoque abaixo de 5
 
             while (resultSet.next()) {
+                int quantidade = resultSet.getInt("quantidade");
+                if (quantidade < 5) {
+                    estoqueBaixo = true; // Marcar que existe algum produto com estoque baixo
+                }
+
                 Object[] row = {
                         resultSet.getInt("id"),
                         resultSet.getString("nome"),
                         resultSet.getString("descricao"),
-                        resultSet.getInt("quantidade"),
+                        quantidade,
                         resultSet.getDouble("preco_compra"),
                         resultSet.getDouble("preco_venda"),
                         resultSet.getInt("categoria_id")
                 };
                 tableModel.addRow(row);
+            }
+
+            // Se algum produto tiver estoque abaixo de 5, exibe um alerta
+            if (estoqueBaixo) {
+                JOptionPane.showMessageDialog(this, "Alerta: Alguns produtos estão com estoque abaixo do mínimo (menos de 5 itens).",
+                        "Alerta de Estoque", JOptionPane.WARNING_MESSAGE);
             }
 
         } catch (Exception e) {
@@ -80,6 +85,3 @@ public class RelatórioView extends JFrame {
         });
     }
 }
-
-
-

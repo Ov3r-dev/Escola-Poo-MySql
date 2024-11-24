@@ -1,3 +1,4 @@
+
 package controller;
 
 import model.Produto;
@@ -104,6 +105,35 @@ public class ProdutoController {
 
         return produtos;
     }
+
+    public void registrarEntradaProduto(int produtoId, int quantidadeEntrada) {
+        String sql = "UPDATE produto SET quantidade = quantidade + ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, quantidadeEntrada); // Quantidade a ser adicionada ao estoque
+            stmt.setInt(2, produtoId); // ID do produto a ser atualizado
+            stmt.executeUpdate(); // Executa a atualização
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void registrarSaidaProduto(int produtoId, int quantidadeSaida) {
+        String sql = "UPDATE produto SET quantidade = quantidade - ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, quantidadeSaida); // Quantidade a ser removida do estoque
+            stmt.setInt(2, produtoId); // ID do produto a ser atualizado
+            stmt.executeUpdate(); // Executa a atualização
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public List<Produto> consultarProdutosComEstoqueBaixo(int quantidadeMaxima) {
         List<Produto> produtos = new ArrayList<>();

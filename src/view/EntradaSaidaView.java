@@ -1,77 +1,101 @@
 package view;
 
-import database.DatabaseConnection;
+import controller.ProdutoController;
 import javax.swing.*;
 import java.awt.*;
-import java.sql.*;
-import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class EntradaSaidaView extends JFrame {
 
-    private JTable table;
-    private DefaultTableModel tableModel;
-
-    // SQL para pegar todas as movimentações de estoque
-    private final String sql = "SELECT p.nome, m.quantidade, m.tipo, m.data_movimentacao " +
-            "FROM movimentacao_estoque m " +
-            "JOIN produto p ON m.produto_id = p.id " +
-            "ORDER BY m.data_movimentacao DESC";
+    private JTextField txtProdutoId, txtQuantidade;
+    private ProdutoController produtoController;
 
     public EntradaSaidaView() {
-        setTitle("Relatório de Operações");
-        setSize(800, 400);
+        setTitle("Registro de Entrada e Saída de Produtos");
+        setSize(400, 200);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Configura a tabela e seu modelo de dados
-        tableModel = new DefaultTableModel();
-        table = new JTable(tableModel);
+        produtoController = new ProdutoController();
 
-        // Definindo as colunas da tabela
-        tableModel.addColumn("Produto");
-        tableModel.addColumn("Quantidade");
-        tableModel.addColumn("Tipo de Movimentação");
-        tableModel.addColumn("Data");
+        // Layout do formulário
+        setLayout(new GridLayout(4, 2));
 
-        // Adiciona a tabela em um JScrollPane
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
+        add(new JLabel("ID do Produto:"));
+        txtProdutoId = new JTextField();
+        add(txtProdutoId);
 
-        // Carrega os dados da movimentação de estoque no banco de dados
-        loadDataFromDatabase();
+        add(new JLabel("Quantidade:"));
+        txtQuantidade = new JTextField();
+        add(txtQuantidade);
+
+        JButton btnEntrada = new JButton("Registrar Entrada");
+        add(btnEntrada);
+
+        JButton btnSaida = new JButton("Registrar Saída");
+        add(btnSaida);
+
+        // Ação do botão Registrar Entrada
+        btnEntrada.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registrarEntrada();
+            }
+        });
+
+        // Ação do botão Registrar Saída
+        btnSaida.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registrarSaida();
+            }
+        });
     }
 
-    private void loadDataFromDatabase() {
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+    private void registrarEntrada() {
+        try {
+            int produtoId = Integer.parseInt(txtProdutoId.getText());
+            int quantidade = Integer.parseInt(txtQuantidade.getText());
 
-            // Limpa as linhas da tabela antes de adicionar os novos dados
-            tableModel.setRowCount(0);
-
-            // Preenche a tabela com os dados de movimentação de estoque
-            while (resultSet.next()) {
-                Object[] row = {
-                        resultSet.getString("nome"),            // Nome do produto
-                        resultSet.getInt("quantidade"),         // Quantidade
-                        resultSet.getString("tipo"),            // Tipo da operação (entrada/saída)
-                        resultSet.getTimestamp("data")          // Data da movimentação
-                };
-                tableModel.addRow(row);
+            // Verifica se a quantidade é maior que zero
+            if (quantidade <= 0) {
+                JOptionPane.showMessageDialog(this, "A quantidade deve ser maior que zero!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao carregar dados do banco: " + e.getMessage(),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            // Chama o método do controller para registrar a entrada
+            produtoController.registrarEntradaProduto(produtoId, quantidade);
+            JOptionPane.showMessageDialog(this, "Entrada registrada com sucesso!");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira um número válido para o ID do produto e a quantidade.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void registrarSaida() {
+        try {
+            int produtoId = Integer.parseInt(txtProdutoId.getText());
+            int quantidade = Integer.parseInt(txtQuantidade.getText());
+
+            // Verifica se a quantidade é maior que zero
+            if (quantidade <= 0) {
+                JOptionPane.showMessageDialog(this, "A quantidade deve ser maior que zero!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Chama o método do controller para registrar a saída
+            produtoController.registrarSaidaProduto(produtoId, quantidade);
+            JOptionPane.showMessageDialog(this, "Saída registrada com sucesso!");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira um número válido para o ID do produto e a quantidade.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            // Exibe a janela do relatório de operações
-            EntradaSaidaView relatorioView = new EntradaSaidaView();
-            relatorioView.setVisible(true);
+            new EntradaSaidaView().setVisible(true);
         });
     }
 }

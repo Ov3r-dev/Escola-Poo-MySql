@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
-
     public MainFrame() {
         setTitle("Gerenciador de Estoque");
         setSize(600, 400);
@@ -43,6 +42,16 @@ public class MainFrame extends JFrame {
             }
         });
         menuProduto.add(itemConsultarProdutos);
+
+        // Adicionando o item "Registrar Entrada/Saída" ao menu Produto
+        JMenuItem itemEntradaSaida = new JMenuItem("Registrar Entrada/Saída");
+        itemEntradaSaida.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EntradaSaidaView().setVisible(true); // Abre a tela de registro de entrada/saída de produtos
+            }
+        });
+        menuProduto.add(itemEntradaSaida);
 
         // Menu Categoria
         JMenu menuCategoria = new JMenu("Categoria");
