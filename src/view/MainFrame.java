@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
         itemCadastrarProduto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ProdutoView().setVisible(true);
+                new ProdutoView().setVisible(true); // Abre a tela de cadastro de produto
             }
         });
         menuProduto.add(itemCadastrarProduto);
@@ -30,10 +30,19 @@ public class MainFrame extends JFrame {
         itemGerenciarProdutos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new EditarView().setVisible(true);
+                new EditarView().setVisible(true); // Abre a tela de gerenciamento de produtos
             }
         });
         menuProduto.add(itemGerenciarProdutos); // Adiciona o item de Gerenciar Produtos ao menu
+
+        JMenuItem itemConsultarProdutos = new JMenuItem("Consultar Produtos");
+        itemConsultarProdutos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ConsultaView().setVisible(true); // Abre a tela de consulta de produtos
+            }
+        });
+        menuProduto.add(itemConsultarProdutos); // Adiciona o item de Consultar Produtos ao menu
 
         // Menu Categoria
         JMenu menuCategoria = new JMenu("Categoria");
@@ -41,7 +50,7 @@ public class MainFrame extends JFrame {
         itemCadastrarCategoria.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CategoriaView().setVisible(true);
+                new CategoriaView().setVisible(true); // Abre a tela de cadastro de categoria
             }
         });
         menuCategoria.add(itemCadastrarCategoria);
@@ -52,7 +61,7 @@ public class MainFrame extends JFrame {
         itemRelatorio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new RelatórioView().setVisible(true);
+                new RelatórioView().setVisible(true); // Abre a tela de relatório
             }
         });
         menuRelatorio.add(itemRelatorio);
@@ -62,13 +71,13 @@ public class MainFrame extends JFrame {
         menuBar.add(menuCategoria);
         menuBar.add(menuRelatorio);
 
-        setJMenuBar(menuBar);
+        setJMenuBar(menuBar); // Define a barra de menus
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame();
-            frame.setVisible(true);
+            frame.setVisible(true); // Exibe a tela principal
         });
     }
 }
